@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>登入 - 机房收费管理系统</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/css/admin.css" media="all">
+  <link rel="stylesheet" href="/css/layui.css" media="all">
+  <link rel="stylesheet" href="/css/login.css" media="all">
+</head>
+<body>
+
+  <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+    <div class="layadmin-user-login-main">
+      <div id="logo"><img src="/images/logo.png"  alt="logo"></div>
+      <div class="layadmin-user-login-box layadmin-user-login-header">
+        <h2>机房收费管理系统</h2>
+        <p>南京邮电大学计算机学院</p>
+      </div>
+      <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
+          <input id="user" type="text" name="username"  lay-verify="required" placeholder="用户名" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+          <input id="pass" type="password" name="password"  lay-verify="required" placeholder="密码" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <button id="login_btn" class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">登 入</button>
+        </div>
+      </div>
+    </div>    
+  </div>
+
+  <script src="/js/layui.js"></script>  
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script>
+  layui.config({
+    base: '../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'user'], function(){
+    var $ = layui.$
+    ,setter = layui.setter
+    ,admin = layui.admin
+    ,form = layui.form
+    ,router = layui.router()
+    ,search = router.search;
+  });
+  $(function(){
+    $("#login_btn").click(function(){
+      if($("#user").val().length == 0){
+        return alert("Please input content");
+      }
+      if($("#pass").val().length == 0){
+        return alert("Please input password");
+      }
+      $.ajax({
+        url:'http://127.0.0.1:3000/login',
+        data:{
+          id:$("#user").val(),
+          pass:$("#pass").val()
+        },
+        success:function(json){
+          if(json.code==2000){
+            alert("登陆成功");
+            self.location.href="http://127.0.0.1:3000/success/"+json.surfingCode;
+          }else{
+            alert(json.msg);
+          }
+        },
+        error:function(err){
+          console.log(123)
+          console.log(err);
+        }
+      });
+    });
+    $("#reg_btn").click(function(){
+      if($("#user").val().length == 0){
+        return alert("Please input content");
+      }
+      if($("#pass").val().length == 0){
+        return alert("Please input password");
+      }
+      $.ajax({
+        url:"http://127.0.0.1:3000/addCard",
+        type:"GET",
+        // data:{
+        //   name:'12222',
+        //   class:'sdsdssd'
+        // },
+        success:function(json){
+          // var json = eval("("+str+")");
+          console.log(json)
+        },
+        error:function(err){
+          console.log(err);
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>

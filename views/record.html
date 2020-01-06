@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>管理员后台</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  
+  <link rel="stylesheet" href="/css/layui.css"  media="all">
+</head>
+<body class="layui-layout-body">
+<script src="/js/layui.all.js"></script>  
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">管理员后台</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="/add">充值上网卡</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">管理类型</a>
+          <dl class="layui-nav-child">
+            <dd><a href="/root">学生上网卡</a></dd>
+            <dd><a href="/record">上网记录</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <table id="demo" lay-filter="test"></table>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    机房收费管理系统
+  </div>
+</div>
+ 
+<script>
+  layui.use('table', function(){
+    var table = layui.table;
+    
+    //第一个实例
+    table.render({
+      elem: '#demo'
+      ,height: 620
+      ,url: '/recordQueryAll' //数据接口
+      ,page: true //开启分页
+      ,cols: [[ //表头
+        {field: 'id', title: 'ID', width:150, sort: true, fixed: 'left'}
+        ,{field: 'date', title: '日期'}
+        ,{field: 'start_time', title: '开始上机时间', width:150, sort: true}
+        ,{field: 'total_time', title: '总时长', width:150} 
+        ,{field: 'isUsing', title: '是否在使用', width: 177}
+        ,{field: 'code', title:'上机管理码',width: 100}
+      ]]
+    });
+    
+  });
+  </script>
+  <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  </script>
+<script>
+    layui.use('table', function(){
+      var table = layui.table;
+      //监听表格复选框选择
+      table.on('checkbox(demo)', function(obj){
+        console.log(obj)
+      });
+      //监听工具条
+      table.on('tool(demo)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'detail'){
+          layer.msg('ID：'+ data.id + ' 的查看操作');
+        } else if(obj.event === 'del'){
+          layer.confirm('真的删除行么', function(index){
+            obj.del();
+            layer.close(index);
+          });
+        } else if(obj.event === 'edit'){
+          layer.alert('编辑行：<br>'+ JSON.stringify(data))
+        }
+      });
+      
+      var $ = layui.$, active = {
+        getCheckData: function(){ //获取选中数据
+          var checkStatus = table.checkStatus('idTest')
+          ,data = checkStatus.data;
+          layer.alert(JSON.stringify(data));
+        }
+        ,getCheckLength: function(){ //获取选中数目
+          var checkStatus = table.checkStatus('idTest')
+          ,data = checkStatus.data;
+          layer.msg('选中了：'+ data.length + ' 个');
+        }
+        ,isAll: function(){ //验证是否全选
+          var checkStatus = table.checkStatus('idTest');
+          layer.msg(checkStatus.isAll ? '全选': '未全选')
+        }
+      };
+      
+      $('.demoTable .layui-btn').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+    });
+    </script>
+</body>
+</html>

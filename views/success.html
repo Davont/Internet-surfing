@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>登入 - layuiAdmin</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="/css/admin.css" media="all">
+  <link rel="stylesheet" href="/css/layui.css" media="all">
+  <link rel="stylesheet" href="/css/login.css" media="all">
+</head>
+<body>
+
+  <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+    <div class="layadmin-user-login-main">
+      <div id="logo"><img src="/images/logo.png"  alt="logo"></div>
+      <div class="layadmin-user-login-box layadmin-user-login-header">
+        <h2>机房收费管理系统</h2>
+        <p>南京邮电大学计算机学院</p>
+      </div>
+        <div id="status"><h1><strong id="content">登陆成功!</strong></h1></div>
+        <div class="layui-form-item">
+          <button id="signOut_btn" class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">退出登录</button>
+        </div>
+      </div>
+    </div>    
+  </div>
+
+  <script src="/js/layui.js"></script>  
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script>
+  layui.config({
+    base: '../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'user'], function(){
+    var $ = layui.$
+    ,setter = layui.setter
+    ,admin = layui.admin
+    ,form = layui.form
+    ,router = layui.router()
+    ,search = router.search;
+  });
+  $(function(){
+    var code=window.location.href.split('success/')[1];
+    
+    $.ajax({
+          url: "http://127.0.0.1:3000/recordQuery",
+          type:"POST",   //请求方式
+          data:{
+              code:code,
+          },
+          success: function(json) {
+            console.log(json);
+            if(!json.result[0].isUsing){
+              $('#signOut_btn').css('display','none')
+              $('#content').text('已下机！')
+            }
+            
+          },
+          error: function(err) {
+            console.log(123);
+            console.log(err);
+          }
+        });
+      $("#signOut_btn").click(function() {
+        if(confirm("你确定要注销吗？")){
+          $.ajax({
+          url: "http://127.0.0.1:3000/logOut",
+          data:{
+              code:code,
+          },
+          success: function(json) {
+            $('#signOut_btn').css('display','none')
+            $('#content').text('注销成功！')
+          },
+          error: function(err) {
+            console.log(123);
+            console.log(err);
+          }
+        });
+        }
+        
+      });
+  });
+  </script>
+</body>
+</html>

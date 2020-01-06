@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>管理员后台</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" href="/css/layui.css" media="all" />
+    <link
+      rel="stylesheet"
+      href="/css/modules/layer/default/layer.css"
+      media="all"
+    />
+    <style>
+      #add{
+        margin: 30px  380px;
+      }
+    </style>
+  </head>
+  <body class="layui-layout-body">
+    <script src="/js/layui.all.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <div class="layui-layout layui-layout-admin">
+      <div class="layui-header">
+        <div class="layui-logo">管理员后台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+          <li class="layui-nav-item"><a href="/add">充值上网卡</a></li>
+        </ul>
+      </div>
+
+      <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+          <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+          <ul class="layui-nav layui-nav-tree" lay-filter="test">
+            <li class="layui-nav-item layui-nav-itemed">
+              <a class="" href="javascript:;">管理类型</a>
+              <dl class="layui-nav-child">
+                <dd><a href="/root">学生上网卡</a></dd>
+                <dd><a href="/record">上网记录</a></dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form" id="add">
+            <div class="layui-form-item">
+              <label  for="LAY-user-login-username"></label>
+              <input id="userid" type="text" name="username"  lay-verify="required" placeholder="学生卡ID" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+              <label for="LAY-user-login-password"></label>
+              <input id="moneny" type="text"   lay-verify="required" placeholder="充值金额" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+              <button id="login_btn" class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">充 值</button>
+            </div>
+
+      </div>
+
+      <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        机房收费管理系统
+      </div>
+    </div>
+
+    <script>
+      layui.use("table", function() {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+          elem: "#demo",
+          height: 620,
+          url: "/cardQueryAll", //数据接口
+          page: true, //开启分页
+          cols: [
+            [
+              //表头
+              {
+                field: "id",
+                title: "ID",
+                width: 300,
+                sort: true,
+                fixed: "left"
+              },
+              { field: "name", title: "姓名", width: 300 },
+              { field: "class", title: "学号", width: 300, sort: true },
+              { field: "balance", title: "余额", width: 80 },
+              { field: "status", title: "卡片状态", width: 177 },
+              { fixed: "right", align: "center", toolbar: "#barDemo" }
+            ]
+          ]
+        });
+      });
+    </script>
+    <script type="text/html" id="barDemo">
+      <button class="layui-btn layui-btn-xs lose" lay-event="edit" >挂失</button>
+    </script>
+    <script>
+ $(function(){
+    $("#login_btn").click(function(){
+      if($("#userid").val().length == 0){
+        return alert("Please input id");
+      }
+      if($("#moneny").val().length == 0){
+        return alert("Please input number");
+      }
+      $.ajax({
+        url:'http://127.0.0.1:3000/addbalance',
+        type:'POST',
+        data:{
+          id:$("#userid").val(),
+          balance:$("#moneny").val()
+        },
+        success:function(json){
+          if(json.code==200){
+            console.log(json)
+            alert("充值成功");
+          }else{
+            alert(json.msg);
+          }
+        },
+        error:function(err){
+          console.log(123)
+          console.log(err);
+        }
+      });
+    });
+  });
+    </script>
+  </body>
+</html>
