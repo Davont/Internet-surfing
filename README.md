@@ -24,7 +24,7 @@
 
 ## START
 
-* 用的的express.js 开发。
+* 用的 express.js 开发。
 * 事先必须安装node.js，连接数据库。数据库格式在文件mysql/sql.js里配置
 * 然后打开终端：使用命令：
     ```npm install```
