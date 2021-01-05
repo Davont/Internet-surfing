@@ -30,3 +30,38 @@
     ```npm install```
     ```npm start```
 * 在浏览器输入：http://localhost:3000 即可输入登录页面
+
+* 学生登陆界面：http://127.0.0.1:3000/
+* 管理员界面：http://127.0.0.1:3000/root
+
+
+## 数据库类型
+### card
+```
+CREATE TABLE `card` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` char(100) DEFAULT NULL,
+  `class` char(100) DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  `balance` float DEFAULT NULL,
+  `password` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+### record
+```
+CREATE TABLE `record` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
+  `total_time` time DEFAULT NULL,
+  `isUsing` tinyint(1) DEFAULT NULL,
+  `recordId` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+开始时连接好数据库，创建一个database为surfing的数据库，在里面创建两张表（card和record），card里面要有一条数据，用于登陆，记得status为1，否则status为0是挂失状态。
+
+## 小结
+回顾之前写的代码，写的很烂，建议自己优化。

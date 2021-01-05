@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/css/layui.css"  media="all">
 </head>
 <body class="layui-layout-body">
-<script src="/js/layui.all.js"></script>  
+<script src="/layui.all.js"></script>
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
     <div class="layui-logo">管理员后台</div>
@@ -61,7 +61,7 @@
       ,url: '/recordQueryAll' //数据接口
       ,page: true //开启分页
       ,cols: [[ //表头
-        {field: 'id', title: 'ID', width:150, sort: true, fixed: 'left'}
+        {field: 'recordId', title: 'ID', width:150, sort: true, fixed: 'left'}
         ,{field: 'date', title: '日期'}
         ,{field: 'start_time', title: '开始上机时间', width:150, sort: true}
         ,{field: 'total_time', title: '总时长', width:150} 

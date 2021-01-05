@@ -6,10 +6,9 @@ var pool = require('../mysql/sql')
 
 var updateIsUsing = function (req, res) {
     var code = req.query.code;
-    console.log('22222222222222');
     console.log(code);
     pool.getConnection(function (err, connection) {
-        connection.query('UPDATE record SET isUsing=0 WHERE code =' + code, function (err, result) {
+        connection.query('UPDATE record SET isUsing=0 WHERE id =' + code, function (err, result) {
             connection.release();
         });
     })

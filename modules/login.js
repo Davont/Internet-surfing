@@ -24,13 +24,11 @@ var updateStatus = function (req, res) {
 var queryCard = async function (req, res) {
     var id = req.query.id;
     var code = req.query.code;
-    console.log('----')
-    console.log("code"+code)
 
     function connection(id, code) {
         return new Promise(function (resolve, reject) {
             pool.getConnection(function (err, connection) {
-                connection.query('SELECT balance FROM card WHERE id=' + id + ';SELECT status FROM card WHERE id=' + id + ';SELECT isUsing FROM record WHERE code=' + code, function (err, result) {
+                connection.query('SELECT balance FROM card WHERE id=' + id + ';SELECT status FROM card WHERE id=' + id + ';SELECT isUsing FROM record WHERE id=' + code, function (err, result) {
                     connection.release();
                     resolve({
                         'result': result
@@ -45,7 +43,7 @@ var queryCard = async function (req, res) {
 }
 
 var addTime = function (req, res) {
-    var id = req.query.id;
+    var id = req.query.code;
     pool.getConnection(function (err, connection) {
         connection.query('UPDATE record SET total_time=date_add(total_time,interval 30 SECOND) WHERE id =' + id, function (err, result) {
             connection.release();
@@ -67,7 +65,6 @@ var login = function (req, res, next) {
     var pass = req.query['pass'];
     card.login(req, res).then(function (data) {
         var cardInfo = data.result[0];
-        console.log(cardInfo)
         if (cardInfo == null||cardInfo == undefined) {
             //send可以直接写jsonif
             //前台接收到的格式也是json
@@ -94,12 +91,11 @@ var login = function (req, res, next) {
             });
         }else {
             //登陆成功，并开始计时
-
             var date = new Date();
             var req = {
                 query: {
                     id: cardInfo.id,
-                    date: date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate(),
+                    date: date.getFullYear() + '-' + (+date.getMonth()+1) + '-' + date.getDate(),
                     start_time: date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds(),
                     total_time: 0,
                     isUsing: 1,
@@ -115,7 +111,6 @@ var login = function (req, res, next) {
                 });
                 var change = setInterval(function () {
                     queryCard(req, res).then(function (data) {
-
                         var status = data.result[1][0].status;
                         var balance = data.result[0][0].balance;
                         var isUsing = data.result[2][0].isUsing;

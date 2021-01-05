@@ -1,8 +1,8 @@
 var pool= require('./sql')
 var json=require('./json')
 var sql = {
-    insert:'INSERT INTO record(id,date,start_time,total_time,isUsing) VALUES(?,?,?,?,?)',
-    delete: 'DELETE FROM record WHERE id=?',
+    insert:'INSERT INTO record(recordId,date,start_time,total_time,isUsing) VALUES(?,?,?,?,?)',
+    delete: 'DELETE FROM record WHERE recordId=?',
     queryById: 'SELECT * FROM record WHERE code=?',
     queryAll: 'SELECT * FROM record',
 }
@@ -58,7 +58,7 @@ var record={
                     }
                 }
                 sqlString=sqlString.substring(0,sqlString.length-1);
-                sqlString='UPDATE record SET '+sqlString+' WHERE id=?';
+                sqlString='UPDATE record SET '+sqlString+' WHERE recordId=?';
                 array.push(param.id)
         }
         function connection(sqlString,array){

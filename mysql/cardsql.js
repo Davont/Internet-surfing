@@ -139,7 +139,6 @@ var card={
             })
         }
         var data= await connection(sql,id);
-        //console.log(data)
         return data;
         
     }
